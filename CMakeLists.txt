@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.12)
 
 # Mod Options
 project(Amethyst-ToggleSprint CXX ASM_NASM)
-set(MOD_VERSION "1.0.0")
+set(MOD_VERSION "1.1.0")
 set(MOD_AUTHOR "KingRocco21")
 
 # Amethyst Minecraft Folder
