@@ -1,3 +1,5 @@
+# Please read before using:
+If you don't plan on toggling sprint off, then you don't need this mod. Just add `87` to `keyboard_type_0_key.sprint:` and `keyboard_type_1_key.sprint:` in your `options.txt` file.
 # Usage Guide
 1. Install [Amethyst](https://github.com/FrederoxDev/Amethyst-Launcher)
 2. Open the Mod Manager in Amethyst Launcher, and click `Open Mods Folder`

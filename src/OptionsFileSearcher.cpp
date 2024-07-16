@@ -31,8 +31,11 @@ std::vector<int> findExistingKeys(std::string_view actionName, const std::vector
             while (commaPosition != std::string::npos)
             {
                 std::string key{ keysView.substr(0, commaPosition) };
-                Log::Info("Found existing {} key: {}", actionName, key);
-                keys.emplace_back(std::stoi(key));
+                if (key.compare("0") != 0) // 0 in options.txt means "Unassigned"
+                {
+                    Log::Info("Found existing {} key: {}", actionName, key);
+                    keys.emplace_back(std::stoi(key));
+                }
 
                 keysView.remove_prefix(commaPosition + 1);
                 commaPosition = keysView.find_first_of(',');
@@ -41,8 +44,11 @@ std::vector<int> findExistingKeys(std::string_view actionName, const std::vector
             if (!keysView.empty())
             {
                 std::string lastKey{ keysView };
-                Log::Info("Found last existing {} key: {}", actionName, lastKey);
-                keys.emplace_back(std::stoi(lastKey));
+                if (lastKey.compare("0") != 0) // 0 in options.txt means "Unassigned"
+                {
+                    Log::Info("Found last existing {} key: {}", actionName, lastKey);
+                    keys.emplace_back(std::stoi(lastKey));
+                }
             }
 
             if (!keys.empty())
