@@ -5,9 +5,9 @@
 # Usage Guide
 1. Install [Amethyst](https://github.com/FrederoxDev/Amethyst-Launcher)
 2. Open the Mod Manager in Amethyst Launcher, and click `Open Mods Folder`
-3. Download the latest [ToggleSprint release](https://github.com/KingRocco21/Amethyst-ToggleSprint/releases)
-4. Add [AmethystRuntime](https://github.com/FrederoxDev/Amethyst/releases/) and ToggleSprint to the mods folder
-5. Extract them, and check for duplicate folders inside each mod.
+3. Download the latest [ToggleSprint release](https://github.com/KingRocco21/Amethyst-ToggleSprint/releases) and the required AmethystRuntime
+4. Add AmethystRuntime and ToggleSprint to the mods folder
+5. Extract them, and check for duplicate folders inside each mod. If you see duplicate folder names, move the contents out of the duplicate.
 6. Close and reopen Amethyst Launcher, open the `Profile Editor`, and create or edit a profile with AmethystRuntime and Amethyst-ToggleSprint enabled
 7. Launch the game, and sprint should be toggled on by default.
 
