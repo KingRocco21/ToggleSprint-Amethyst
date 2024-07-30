@@ -9,6 +9,11 @@ static ToggleManager* g_toggleManager;
 
 void RegisterInputs(RegisterInputsEvent& event)
 {
+    // Hide Sprint in the settings so it can't conflict with "key.toggle.sprint".
+    auto& keymappings{ Amethyst::GetContext().mOptions->mKeyboardRemappings };
+    keymappings.at(0)->mKeymappings.at(17).mAllowRemap = false; // "key.sprint" is at index 17
+    keymappings.at(1)->mKeymappings.at(34).mAllowRemap = false; // "key.sprint" is at index 34
+
     event.inputManager.RegisterNewInput("toggle.sprint", findExistingKeys("key.toggle.sprint", { 17 }), true); // 17 = Ctrl
 
     event.inputManager.RegisterNewInput("conditional.sprint", findExistingKeys("key.forward", { 87 }), false); // 87 = W
