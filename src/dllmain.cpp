@@ -1,17 +1,20 @@
 ﻿#include "dllmain.hpp"
 #include "ToggleManager.hpp"
 #include "OptionsFileSearcher.hpp"
-#include "amethyst/Log.hpp"
+#include <amethyst/runtime/events/GameEvents.hpp>
+#include <amethyst/runtime/events/InputEvents.hpp>
+#include <amethyst/Log.hpp>
 
-AmethystContext* context;
-ToggleManager* toggleManager;
+static ToggleManager* g_toggleManager;
 
-void RegisterInputs(Amethyst::InputManager* input)
+void RegisterInputs(RegisterInputsEvent& event)
 {
-    const std::string fullActionName{ "key.toggle.sprint" };
-    input->RegisterNewInput("toggle.sprint", findExistingKeys(fullActionName, { 17 } ), true);
+    event.inputManager.RegisterNewInput("toggle.sprint", findExistingKeys("key.toggle.sprint", { 17 }), true); // 17 = Ctrl
 
-    /* Use this to find your desired action index.
+    event.inputManager.RegisterNewInput("conditional.sprint", findExistingKeys("key.forward", { 87 }), false); // 87 = W
+
+    // Use this to search through the registered inputs for names or indexes.
+    /*
     std::vector<Keymapping> keymappings1{ context->mOptions->mKeyboardRemappings.at(0)->mKeymappings };
     for (int i{ 0 }; i != keymappings1.size(); ++i)
     {
@@ -28,30 +31,38 @@ void RegisterInputs(Amethyst::InputManager* input)
     */
 }
 
-void OnStartJoinGame(ClientInstance* client)
+void OnStartJoinGame(OnStartJoinGameEvent& event)
 {
-    // "key.sprint" is at index 17 for layout 1, and 34 for layout 2. 87 = W.
-    toggleManager = new ToggleManager{ context, 17, 34, { 87 } };
+    g_toggleManager = new ToggleManager{ event.client };
 
-    context->mInputManager.AddButtonDownHandler("toggle.sprint", [](FocusImpact focus, ClientInstance& client)
+    Amethyst::InputManager& inputs{ *Amethyst::GetContext().mInputManager };
+    inputs.AddButtonDownHandler("toggle.sprint", [](FocusImpact focus, IClientInstance& client)
         {
-            toggleManager->toggleKey();
+            g_toggleManager->toggle();
+        }, false);
+
+    inputs.AddButtonDownHandler("conditional.sprint", [](FocusImpact focus, IClientInstance& client)
+        {
+            g_toggleManager->sprintIfToggled();
         }, false);
 }
 
-void OnRequestLeaveGame()
+void OnRequestLeaveGame(OnRequestLeaveGameEvent& event)
 {
-    delete toggleManager;
-    toggleManager = nullptr;
+    delete g_toggleManager;
+    g_toggleManager = nullptr;
 }
 
-ModFunction void Initialize(AmethystContext* ctx) 
+ModFunction void Initialize(AmethystContext& ctx) 
 {
-    context = ctx;
+    Amethyst::InitializeAmethystMod(ctx);
 
-    ctx->mEventManager.registerInputs.AddListener(RegisterInputs);
-    ctx->mEventManager.onStartJoinGame.AddListener(OnStartJoinGame);
-    ctx->mEventManager.onRequestLeaveGame.AddListener(OnRequestLeaveGame);
+    Amethyst::GetContext().mFeatures->enableInputSystem = true;
+    
+    Amethyst::EventBus& events{ Amethyst::GetEventBus() };
+    events.AddListener<OnStartJoinGameEvent>(&OnStartJoinGame);
+    events.AddListener<RegisterInputsEvent>(&RegisterInputs);
+    events.AddListener<OnRequestLeaveGameEvent>(&OnRequestLeaveGame);
 
     Log::Info("[ToggleSprint] Mod successfully initialized!");
 }

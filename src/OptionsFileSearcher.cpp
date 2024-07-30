@@ -1,5 +1,5 @@
 #include "OptionsFileSearcher.hpp"
-#include "amethyst/Log.hpp"
+#include <amethyst/Log.hpp>
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -23,7 +23,7 @@ std::vector<int> findExistingKeys(std::string_view actionName, const std::vector
         if (line.find(desiredLineName) != std::string::npos)
         {
             std::string_view keysView{ line };
-            keysView.remove_prefix(34); // The keybinds start at character 34
+            keysView.remove_prefix(desiredLineName.length());
 
             // Iterate through the keys and add them to a vector
             std::vector<int> keys{};

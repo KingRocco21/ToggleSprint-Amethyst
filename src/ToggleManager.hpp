@@ -1,17 +1,14 @@
 #pragma once
-#include "amethyst/runtime/AmethystContext.hpp"
-#include "minecraft/src-client/common/client/input/Keymapping.hpp"
+#include <minecraft/src-client/common/client/game/ClientInstance.hpp>
 
 class ToggleManager
 {
 public:
-	ToggleManager(AmethystContext* context, int layout1Index, int layout2Index, int keyWhenToggled);
-	void toggleKey();
-	~ToggleManager();
+	ToggleManager(ClientInstance& client);
+	void toggle();
+	void sprintIfToggled();
 
 private:
-	Keymapping& mLayout1Keymapping;
-	Keymapping& mLayout2Keymapping;
-	int mToggledKey;
-	bool mToggled;
+	ClientInstance& mClient;
+	bool mIsToggled;
 };
