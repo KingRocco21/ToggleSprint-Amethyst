@@ -4,36 +4,43 @@
 #include <amethyst/runtime/events/GameEvents.hpp>
 #include <amethyst/runtime/events/InputEvents.hpp>
 #include <amethyst/Log.hpp>
+#include <minecraft/src-client/common/client/input/Keymapping.hpp>
+#include <vector>
 
 static ToggleManager* g_toggleManager;
 
 void RegisterInputs(RegisterInputsEvent& event)
 {
     // Hide Sprint in the settings so it can't conflict with "key.toggle.sprint".
-    auto& keymappings{ Amethyst::GetContext().mOptions->mKeyboardRemappings };
-    keymappings.at(0)->mKeymappings.at(17).mAllowRemap = false; // "key.sprint" is at index 17
-    keymappings.at(1)->mKeymappings.at(34).mAllowRemap = false; // "key.sprint" is at index 34
+    AmethystContext& context{ Amethyst::GetContext() };
+
+    std::vector<Keymapping>& keymappings1{ context.mOptions->mKeyboardRemappings.at(0)->mKeymappings };
+    for (int i{ 0 }; i != keymappings1.size(); ++i)
+    {
+        Keymapping& current{ keymappings1.at(i) };
+        if (current.mAction == "key.sprint")
+        {
+            Log::Info("[{}] key.sprint found at index {}", MOD_NAME, i);
+            current.mAllowRemap = false;
+        }
+    }
+
+    std::vector<Keymapping>& keymappings2{ context.mOptions->mKeyboardRemappings.at(1)->mKeymappings };
+    for (int i{ 0 }; i != keymappings2.size(); ++i)
+    {
+        Keymapping& current{ keymappings2.at(i) };
+        if (current.mAction == "key.sprint")
+        {
+            Log::Info("[{}] key.sprint found at index {}", MOD_NAME, i);
+            current.mAllowRemap = false;
+        }
+    }
+    Log::Info("");
+
 
     event.inputManager.RegisterNewInput("toggle.sprint", findExistingKeys("key.toggle.sprint", { 17 }), true); // 17 = Ctrl
 
     event.inputManager.RegisterNewInput("conditional.sprint", findExistingKeys("key.forward", { 87 }), false); // 87 = W
-
-    // Use this to search through the registered inputs for names or indexes.
-    /*
-    std::vector<Keymapping> keymappings1{ context->mOptions->mKeyboardRemappings.at(0)->mKeymappings };
-    for (int i{ 0 }; i != keymappings1.size(); ++i)
-    {
-        Keymapping current{ keymappings1.at(i) };
-        Log::Info("{}: {}", i, current.mAction);
-    }
-    Log::Info("");
-    std::vector<Keymapping> keymappings2{ context->mOptions->mKeyboardRemappings.at(1)->mKeymappings };
-    for (int i{ 0 }; i != keymappings2.size(); ++i)
-    {
-        Keymapping current{ keymappings2.at(i) };
-        Log::Info("{}: {}", i, current.mAction);
-    }
-    */
 }
 
 void OnStartJoinGame(OnStartJoinGameEvent& event)
@@ -69,5 +76,5 @@ ModFunction void Initialize(AmethystContext& ctx)
     events.AddListener<RegisterInputsEvent>(&RegisterInputs);
     events.AddListener<OnRequestLeaveGameEvent>(&OnRequestLeaveGame);
 
-    Log::Info("[ToggleSprint] Mod successfully initialized!");
+    Log::Info("[{}] Mod successfully initialized!", MOD_NAME);
 }

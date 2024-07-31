@@ -11,7 +11,7 @@ std::vector<int> findExistingKeys(std::string_view actionName, const std::vector
 
     if (!inf)
     {
-        Log::Info("options.txt failed to open, returning default {} keys.", actionName);
+        Log::Info("[{}] options.txt failed to open, returning default {} keys.", MOD_NAME, actionName);
         return keysIfNotFound;
     }
 
@@ -33,7 +33,7 @@ std::vector<int> findExistingKeys(std::string_view actionName, const std::vector
                 std::string key{ keysView.substr(0, commaPosition) };
                 if (key.compare("0") != 0) // 0 in options.txt means "Unassigned"
                 {
-                    Log::Info("Found existing {} key: {}", actionName, key);
+                    Log::Info("[{}] Found existing {} key: {}", MOD_NAME, actionName, key);
                     keys.emplace_back(std::stoi(key));
                 }
 
@@ -46,7 +46,7 @@ std::vector<int> findExistingKeys(std::string_view actionName, const std::vector
                 std::string lastKey{ keysView };
                 if (lastKey.compare("0") != 0) // 0 in options.txt means "Unassigned"
                 {
-                    Log::Info("Found last existing {} key: {}", actionName, lastKey);
+                    Log::Info("[{}] Found last existing {} key: {}", MOD_NAME, actionName, lastKey);
                     keys.emplace_back(std::stoi(lastKey));
                 }
             }
@@ -56,6 +56,6 @@ std::vector<int> findExistingKeys(std::string_view actionName, const std::vector
         }
     }
 
-    Log::Info("No existing keybinds found for {}, returning default keys.", actionName);
+    Log::Info("[{}] No existing keybinds found for {}, returning default keys.", MOD_NAME, actionName);
     return keysIfNotFound;
 }
