@@ -16,6 +16,7 @@ void ToggleManager::toggle()
 	}
 	else
 	{
+		mClient.getLocalPlayer()->setSprinting(false);
 		mIsToggled = false;
 		Log::Info("[ToggleSprint] Sprint untoggled.");
 	}
