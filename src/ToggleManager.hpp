@@ -6,9 +6,11 @@ class ToggleManager
 public:
 	ToggleManager(ClientInstance& client);
 	void toggle();
-	void sprintIfToggled();
+	void setWalkingForwardState(bool isWalkingForward) { mIsWalkingForward = isWalkingForward; };
+	void sprint();
 
 private:
 	ClientInstance& mClient;
 	bool mIsToggled;
+	bool mIsWalkingForward;
 };

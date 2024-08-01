@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.12)
 
 # Mod Options
-project(Amethyst-ToggleSprint CXX ASM_NASM)
-set(MOD_VERSION "2.0.0")
+project(ToggleSprint-Amethyst CXX ASM_NASM)
+set(MOD_VERSION "2.1.0")
 set(MOD_AUTHOR "KingRocco21")
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)

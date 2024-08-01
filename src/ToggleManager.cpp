@@ -1,4 +1,5 @@
 #include "ToggleManager.hpp"
+#include <amethyst/runtime/ModContext.hpp>
 #include <amethyst/Log.hpp>
 #include <minecraft/src-client/common/client/player/LocalPlayer.hpp>
 
@@ -22,10 +23,14 @@ void ToggleManager::toggle()
 	}
 }
 
-void ToggleManager::sprintIfToggled()
+void ToggleManager::sprint()
 {
-	if (mIsToggled)
+	if (mIsToggled && mIsWalkingForward)
 	{
-		mClient.getLocalPlayer()->setSprinting(true);
+		LocalPlayer* player{ mClient.getLocalPlayer() };
+		if (player)
+		{
+			player->setSprinting(true);
+		}
 	}
 }

@@ -43,10 +43,10 @@ void RegisterInputs(RegisterInputsEvent& event)
     }
     Log::Info("");
 
-
+    // Register inputs
     event.inputManager.RegisterNewInput("toggle.sprint", findExistingKeys("key.toggle.sprint", { 17 }), true); // 17 = Ctrl
 
-    event.inputManager.RegisterNewInput("conditional.sprint", findExistingKeys("key.forward", { 87 }), false); // 87 = W
+    event.inputManager.RegisterNewInput("walk.forward", findExistingKeys("key.forward", { 87 }), false); // 87 = W
 }
 
 void OnStartJoinGame(OnStartJoinGameEvent& event)
@@ -59,10 +59,23 @@ void OnStartJoinGame(OnStartJoinGameEvent& event)
             g_toggleManager->toggle();
         }, false);
 
-    inputs.AddButtonDownHandler("conditional.sprint", [](FocusImpact focus, IClientInstance& client)
+    inputs.AddButtonDownHandler("walk.forward", [](FocusImpact focus, IClientInstance& client)
         {
-            g_toggleManager->sprintIfToggled();
+            g_toggleManager->setWalkingForwardState(true);
         }, false);
+
+    inputs.AddButtonUpHandler("walk.forward", [](FocusImpact focus, IClientInstance& client)
+        {
+            g_toggleManager->setWalkingForwardState(false);
+        }, false);
+}
+
+void OnTick(UpdateEvent& event)
+{
+    if (g_toggleManager)
+    {
+        g_toggleManager->sprint();
+    }
 }
 
 void OnRequestLeaveGame(OnRequestLeaveGameEvent& event)
@@ -78,8 +91,9 @@ ModFunction void Initialize(AmethystContext& ctx)
     Amethyst::GetContext().mFeatures->enableInputSystem = true;
     
     Amethyst::EventBus& events{ Amethyst::GetEventBus() };
-    events.AddListener<OnStartJoinGameEvent>(&OnStartJoinGame);
     events.AddListener<RegisterInputsEvent>(&RegisterInputs);
+    events.AddListener<OnStartJoinGameEvent>(&OnStartJoinGame);
+    events.AddListener<UpdateEvent>(&OnTick);
     events.AddListener<OnRequestLeaveGameEvent>(&OnRequestLeaveGame);
 
     Log::Info("[{}] Mod successfully initialized!", MOD_NAME);
