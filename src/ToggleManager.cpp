@@ -6,6 +6,7 @@
 ToggleManager::ToggleManager(ClientInstance& client)
 	: mClient{ client }
 	, mIsToggled{ true } // Sprint is toggled on by default.
+	, mIsWalkingForward{ false }
 {}
 
 void ToggleManager::toggle()

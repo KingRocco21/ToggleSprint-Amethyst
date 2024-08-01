@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.12)
-
+ 
 # Mod Options
 project(ToggleSprint-Amethyst CXX ASM_NASM)
 set(MOD_VERSION "2.1.0")
