@@ -44,6 +44,7 @@ void RegisterInputs(RegisterInputsEvent& event)
     Log::Info("");
 
     // Register inputs
+    // https://learn.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes
     event.inputManager.RegisterNewInput("toggle.sprint", findExistingKeys("key.toggle.sprint", { 17 }), true); // 17 = Ctrl
 
     event.inputManager.RegisterNewInput("walk.forward", findExistingKeys("key.forward", { 87 }), false); // 87 = W
@@ -70,7 +71,7 @@ void OnStartJoinGame(OnStartJoinGameEvent& event)
         }, false);
 }
 
-void OnTick(UpdateEvent& event)
+void OnUpdate(UpdateEvent& event)
 {
     if (g_toggleManager)
     {
@@ -93,7 +94,7 @@ ModFunction void Initialize(AmethystContext& ctx)
     Amethyst::EventBus& events{ Amethyst::GetEventBus() };
     events.AddListener<RegisterInputsEvent>(&RegisterInputs);
     events.AddListener<OnStartJoinGameEvent>(&OnStartJoinGame);
-    events.AddListener<UpdateEvent>(&OnTick);
+    events.AddListener<UpdateEvent>(&OnUpdate);
     events.AddListener<OnRequestLeaveGameEvent>(&OnRequestLeaveGame);
 
     Log::Info("[{}] Mod successfully initialized!", MOD_NAME);
