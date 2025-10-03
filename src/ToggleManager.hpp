@@ -1,5 +1,5 @@
 #pragma once
-#include <minecraft/src-client/common/client/game/ClientInstance.hpp>
+#include <mc/src-client/common/client/game/ClientInstance.hpp>
 
 class ToggleManager
 {
@@ -7,7 +7,7 @@ public:
 	ToggleManager(ClientInstance& client);
 	void toggle();
 	void setWalkingForwardState(bool isWalkingForward) { mIsWalkingForward = isWalkingForward; };
-	void sprint();
+	void trySprint();
 
 private:
 	ClientInstance& mClient;

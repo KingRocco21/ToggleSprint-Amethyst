@@ -1,30 +1,31 @@
 #include "ToggleManager.hpp"
 #include <amethyst/runtime/ModContext.hpp>
 #include <amethyst/Log.hpp>
-#include <minecraft/src-client/common/client/player/LocalPlayer.hpp>
+#include <mc/src-client/common/client/player/LocalPlayer.hpp>
 
 ToggleManager::ToggleManager(ClientInstance& client)
 	: mClient{ client }
 	, mIsToggled{ true } // Sprint is toggled on by default.
 	, mIsWalkingForward{ false }
-{}
+{
+}
 
 void ToggleManager::toggle()
 {
 	if (!mIsToggled)
 	{
 		mIsToggled = true;
-		Log::Info("[ToggleSprint] Sprint toggled.");
+		Log::Info("Sprint toggled.");
 	}
 	else
 	{
 		mClient.getLocalPlayer()->setSprinting(false);
 		mIsToggled = false;
-		Log::Info("[ToggleSprint] Sprint untoggled.");
+		Log::Info("Sprint untoggled.");
 	}
 }
 
-void ToggleManager::sprint()
+void ToggleManager::trySprint()
 {
 	if (mIsToggled && mIsWalkingForward)
 	{

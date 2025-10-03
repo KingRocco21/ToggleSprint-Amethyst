@@ -1,10 +1,12 @@
 ﻿#include "dllmain.hpp"
 #include "ToggleManager.hpp"
 #include "OptionsFileSearcher.hpp"
+#include <amethyst/runtime/mod/Mod.hpp>
+#include <amethyst/runtime/ModContext.hpp>
 #include <amethyst/runtime/events/GameEvents.hpp>
 #include <amethyst/runtime/events/InputEvents.hpp>
 #include <amethyst/Log.hpp>
-#include <minecraft/src-client/common/client/input/Keymapping.hpp>
+#include <mc/src-client/common/client/input/Keymapping.hpp>
 #include <vector>
 
 static ToggleManager* g_toggleManager;
@@ -21,7 +23,7 @@ void RegisterInputs(RegisterInputsEvent& event)
         //Log::Info("{}: {}", i, current.mAction);
         if (current.mAction == "key.sprint")
         {
-            Log::Info("[{}] key.sprint found at index {}", MOD_NAME, i);
+            Log::Info("key.sprint found at index {}. Disabling.", i);
             current.mKeys = {};
             current.mAllowRemap = false;
             break;
@@ -35,48 +37,47 @@ void RegisterInputs(RegisterInputsEvent& event)
         //Log::Info("{}: {}", i, current.mAction);
         if (current.mAction == "key.sprint")
         {
-            Log::Info("[{}] key.sprint found at index {}", MOD_NAME, i);
+            Log::Info("key.sprint found at index {}. Disabling.", i);
             current.mKeys = {};
             current.mAllowRemap = false;
             break;
         }
     }
-    Log::Info("");
 
     // Register inputs
     // https://learn.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes
-    event.inputManager.RegisterNewInput("toggle.sprint", findExistingKeys("key.toggle.sprint", { 17 }), true); // 17 = Ctrl
+    std::vector<int> toggleSprintKeys{ OptionsFileSearcher::findExistingKeys("key.toggle.sprint", { 17 }) }; // 17 = Ctrl
+    Amethyst::InputAction& toggleSprint{ context.mInputManager->RegisterNewInput("toggle.sprint", toggleSprintKeys, true, Amethyst::KeybindContext::Gameplay) };
+    toggleSprint.addButtonDownHandler([](FocusImpact focus, ClientInstance& client)
+        {
+            if (g_toggleManager) g_toggleManager->toggle();
+            else Log::Info("Toggle Sprint pressed outside of gameplay. Ignoring button press.");
+            return Amethyst::InputPassthrough::ModOnly;
+        });
 
-    event.inputManager.RegisterNewInput("walk.forward", findExistingKeys("key.forward", { 87 }), false); // 87 = W
+    Amethyst::InputAction& walkForwards{ context.mInputManager->GetVanillaInput("up") };
+    walkForwards.addButtonDownHandler([](FocusImpact focus, ClientInstance& client)
+        {
+            if (g_toggleManager) g_toggleManager->setWalkingForwardState(true);
+            else Log::Info("Walk Forwards pressed outside of gameplay. Ignoring button press.");
+            return Amethyst::InputPassthrough::Passthrough;
+        });
+    walkForwards.addButtonUpHandler([](FocusImpact focus, ClientInstance& client)
+        {
+            if (g_toggleManager) g_toggleManager->setWalkingForwardState(false);
+            else Log::Info("Walk Forwards pressed outside of gameplay. Ignoring button press.");
+            return Amethyst::InputPassthrough::Passthrough;
+        });
 }
 
 void OnStartJoinGame(OnStartJoinGameEvent& event)
 {
     g_toggleManager = new ToggleManager{ event.client };
-
-    Amethyst::InputManager& inputs{ *Amethyst::GetContext().mInputManager };
-    inputs.AddButtonDownHandler("toggle.sprint", [](FocusImpact focus, IClientInstance& client)
-        {
-            g_toggleManager->toggle();
-        }, false);
-
-    inputs.AddButtonDownHandler("walk.forward", [](FocusImpact focus, IClientInstance& client)
-        {
-            g_toggleManager->setWalkingForwardState(true);
-        }, false);
-
-    inputs.AddButtonUpHandler("walk.forward", [](FocusImpact focus, IClientInstance& client)
-        {
-            g_toggleManager->setWalkingForwardState(false);
-        }, false);
 }
 
 void OnUpdate(UpdateEvent& event)
 {
-    if (g_toggleManager)
-    {
-        g_toggleManager->sprint();
-    }
+    if (g_toggleManager) g_toggleManager->trySprint();
 }
 
 void OnRequestLeaveGame(OnRequestLeaveGameEvent& event)
@@ -85,17 +86,13 @@ void OnRequestLeaveGame(OnRequestLeaveGameEvent& event)
     g_toggleManager = nullptr;
 }
 
-ModFunction void Initialize(AmethystContext& ctx) 
+ModFunction void Initialize(AmethystContext& ctx, const Amethyst::Mod& mod) 
 {
-    Amethyst::InitializeAmethystMod(ctx);
+    Amethyst::InitializeAmethystMod(ctx, mod);
 
-    Amethyst::GetContext().mFeatures->enableInputSystem = true;
-    
     Amethyst::EventBus& events{ Amethyst::GetEventBus() };
     events.AddListener<RegisterInputsEvent>(&RegisterInputs);
     events.AddListener<OnStartJoinGameEvent>(&OnStartJoinGame);
     events.AddListener<UpdateEvent>(&OnUpdate);
     events.AddListener<OnRequestLeaveGameEvent>(&OnRequestLeaveGame);
-
-    Log::Info("[{}] Mod successfully initialized!", MOD_NAME);
 }
