@@ -10,10 +10,10 @@ This mod allows you to press the sprint key once to sprint whenever you start mo
 ## Usage Guide
 1. Install [Amethyst Launcher](https://github.com/FrederoxDev/Amethyst-Launcher)
 2. Open the Mod Manager in Amethyst Launcher, and click `Open Mods Folder`
-3. Download the latest [ToggleSprint release](https://github.com/KingRocco21/ToggleSprint-Amethyst/releases) and the required AmethystRuntime
-4. Add AmethystRuntime and ToggleSprint to the mods folder
+3. Download the latest [Toggle-Sprint release](https://github.com/KingRocco21/ToggleSprint-Amethyst/releases) and the required AmethystRuntime
+4. Add AmethystRuntime and Toggle-Sprint to the mods folder
 5. Extract them, and check for duplicate folders inside each mod. If you see duplicate folder names, move the contents out of the duplicate.
-6. Close and reopen Amethyst Launcher, open the `Profile Editor`, and create or edit a profile with AmethystRuntime and ToggleSprint-Amethyst enabled
+6. Close and reopen Amethyst Launcher, open the `Profile Editor`, and create or edit a profile with AmethystRuntime and Toggle-Sprint enabled
 7. Launch the game, and sprint should be toggled on by default.
 
 ## How do I change the sprint toggle keybind?
