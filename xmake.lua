@@ -35,7 +35,7 @@ else
     modFolder = path.join(
         amethystFolder,
         "mods",
-        string.format("%s@0.0.0-dev", mod_name)
+        string.format("%s@3.0.0", mod_name)
     )
 end
 
