@@ -13,8 +13,8 @@ function bumpVersion(version: string) {
     return parts.join(".");
 }
 
-modConfig.meta.version = bumpVersion(modConfig.meta.version);
-Deno.writeTextFile(filePath, JSON.stringify(modConfig, null, 4));
+// modConfig.meta.version = bumpVersion(modConfig.meta.version);
+// Deno.writeTextFile(filePath, JSON.stringify(modConfig, null, 4));
 
 // Output the new version for GitHub Actions
 console.log(modConfig.meta.version);
