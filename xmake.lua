@@ -12,8 +12,10 @@ local automated = is_config("automated_build", true)
 
 local build_script_path
 if automated then
+    print("Automated build!")
     build_script_path = path.join("Amethyst", "AmethystAPI", "mod_build.lua")
 else
+    print("Local build!")
     build_script_path = path.join(os.getenv(("AMETHYST_SRC")), "AmethystAPI", "mod_build.lua")
 end
 
