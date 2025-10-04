@@ -12,15 +12,13 @@ local automated = is_config("automated_build", true)
 
 local build_script_path
 if automated then
-    print("Automated build!")
     build_script_path = path.join("Amethyst", "AmethystAPI", "mod_build.lua")
 else
-    print("Local build!")
     build_script_path = path.join(os.getenv(("AMETHYST_SRC")), "AmethystAPI", "mod_build.lua")
 end
 
 if not os.isfile(build_script_path) then
-    print("Cannot find build script at: " .. build_script_path)
+    print("Failed to find build script!" .. build_script_path)
 else 
     includes(build_script_path)
     build_mod(mod_name, targetMajor, targetMinor, targetPatch, automated)
