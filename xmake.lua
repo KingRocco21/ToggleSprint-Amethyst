@@ -9,6 +9,7 @@ option("automated_build")
 option_end()
 
 local automated = is_config("automated_build", true)
+print("Automated build: " .. tostring(automated))
 
 local build_script_path
 if automated then
