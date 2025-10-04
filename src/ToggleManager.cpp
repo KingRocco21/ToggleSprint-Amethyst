@@ -15,13 +15,13 @@ void ToggleManager::toggle()
 	if (!mIsToggled)
 	{
 		mIsToggled = true;
-		Log::Info("Sprint toggled.");
+		// Log::Info("Sprint toggled.");
 	}
 	else
 	{
 		mClient.getLocalPlayer()->setSprinting(false);
 		mIsToggled = false;
-		Log::Info("Sprint untoggled.");
+		// Log::Info("Sprint untoggled.");
 	}
 }
 
