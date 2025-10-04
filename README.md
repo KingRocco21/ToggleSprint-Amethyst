@@ -1,4 +1,4 @@
-<img src="https://github.com/FrederoxDev/Amethyst/assets/69014593/08e43b26-05e2-4646-968b-0d3ab6699d78" width="128">
+<img src="icon.png" width="128">
 
 # Toggle Sprint for Amethyst  
 This mod allows you to press the sprint key once to sprint whenever you start moving forwards. You can press it again to stop sprinting.
