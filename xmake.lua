@@ -20,8 +20,8 @@ else
 end
 
 if not os.isfile(build_script_path) then
-    raise("Cannot find build script at: " .. build_script_path)
+    print("Cannot find build script at: " .. build_script_path)
+else 
+    includes(build_script_path)
+    build_mod(mod_name, targetMajor, targetMinor, targetPatch, automated)
 end
-
-includes(build_script_path)
-build_mod(mod_name, targetMajor, targetMinor, targetPatch, automated)
