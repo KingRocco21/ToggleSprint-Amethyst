@@ -15,12 +15,8 @@ jobs:
               uses: actions/checkout@v4
 
             # Checkout AmethystAPI into /Amethyst
-            - name: Checkout AmethystAPI
-              uses: actions/checkout@v4
-              with:
-                  repository: FrederoxDev/Amethyst
-                  path: Amethyst
-                  submodules: recursive
+            - name: Clone AmethystAPI manually
+              run: git clone --recurse-submodules https://github.com/FrederoxDev/Amethyst.git Amethyst
 
             # Build dependencies
             - name: Install Build Tools
