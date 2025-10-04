@@ -19,5 +19,9 @@ else
     build_script_path = path.join(os.getenv(("AMETHYST_SRC")), "AmethystAPI", "mod_build.lua")
 end
 
+if not os.isfile(build_script_path) then
+    raise("Cannot find build script at: " .. build_script_path)
+end
+
 includes(build_script_path)
 build_mod(mod_name, targetMajor, targetMinor, targetPatch, automated)
