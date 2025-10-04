@@ -70,7 +70,9 @@ jobs:
                 Import-Module $env:ChocolateyInstall\helpers\chocolateyProfile.psm1
                 refreshenv
 
-                xmake f --automated_build=y
+                echo "Setting build configuration"
+                xmake f -y --automated_build=y
+                echo "Building project"
                 xmake
               shell: powershell
 
