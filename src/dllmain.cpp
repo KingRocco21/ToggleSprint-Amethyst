@@ -9,6 +9,8 @@
 #include <mc/src-client/common/client/input/Keymapping.hpp>
 #include <vector>
 
+// Testing
+
 static ToggleManager* g_toggleManager;
 
 void RegisterInputs(RegisterInputsEvent& event)
@@ -46,6 +48,7 @@ void RegisterInputs(RegisterInputsEvent& event)
 
     // Register inputs
     // https://learn.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes
+    // https://www.rapidtables.com/convert/number/hex-to-decimal.html?x=31
     std::vector<int> toggleSprintKeys{ OptionsFileSearcher::findExistingKeys("key.toggle.sprint", { 17 }) }; // 17 = Ctrl
     Amethyst::InputAction& toggleSprint{ context.mInputManager->RegisterNewInput("toggle.sprint", toggleSprintKeys, true, Amethyst::KeybindContext::Gameplay) };
     toggleSprint.addButtonDownHandler([](FocusImpact focus, ClientInstance& client)
@@ -67,6 +70,15 @@ void RegisterInputs(RegisterInputsEvent& event)
             if (g_toggleManager) g_toggleManager->setWalkingForwardState(false);
             else Log::Info("Walk Forwards pressed outside of gameplay. Ignoring button press.");
             return Amethyst::InputPassthrough::Passthrough;
+        });
+
+    // Testing
+    std::vector<int> hotbar1Keys{ OptionsFileSearcher::findExistingKeys("key.hotbar.1", { 49 }) }; // 49 = 1 key
+    Amethyst::InputAction& hotbar1{ context.mInputManager->RegisterNewInput("hotkey.1", hotbar1Keys, true, Amethyst::KeybindContext::Screen) };
+    hotbar1.addButtonDownHandler([](FocusImpact focus, ClientInstance& client)
+        {
+            std::cout << "Hotbar 1 pressed\n";
+            return Amethyst::InputPassthrough::ModOnly;
         });
 }
 
